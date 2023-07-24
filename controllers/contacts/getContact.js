@@ -1,10 +1,11 @@
-const { getContactById } = require("../../models/contacts");
+const { Contact } = require("../../models/contact");
 
 /* get object of one contact by id in json-format with status 200, if is isn't correct, return object with message 'Not found' and status 404    */
 const getContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const result = await getContactById(contactId);
+   
+    const result = await Contact.findById(contactId);
     if (!result) {
       res.status(404).json({ message: "Not found" });
       return;
