@@ -1,7 +1,7 @@
 // /* updates the favorite field in an object, which we get by id */
 const { Contact } = require("../../models/contact");
 
-const updateFavorite = async (req, res, next) => {
+const updateStatusContact = async (req, res, next) => {
   try {
     const { contactId } = req.params;
 
@@ -17,4 +17,4 @@ const updateFavorite = async (req, res, next) => {
   }
 };
 
-module.exports = updateFavorite;
+module.exports = updateStatusContact;

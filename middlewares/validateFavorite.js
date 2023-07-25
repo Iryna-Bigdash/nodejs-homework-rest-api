@@ -21,6 +21,8 @@ const validateFavorite = (req, res, next) => {
       .status(400)
       .json({ message: `missing required ${missingField} field` });
   }
+  
+  next();
 };
 
 module.exports = validateFavorite;
