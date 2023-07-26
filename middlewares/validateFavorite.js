@@ -1,10 +1,10 @@
-const { contactJoiSchema } = require("../models/contact");
+const { updateFavoriteSchema } = require("../models/contact");
 
-const validateContact = (req, res, next) => {
-  const { error } = contactJoiSchema.validate(req.body);
+const validateFavorite = (req, res, next) => {
+  const { error } = updateFavoriteSchema.validate(req.body);
 
   if (Object.keys(req.body).length === 0) {
-    return res.status(400).json({ message: "missing fields" });
+    return res.status(400).json({ message: "missing field favorite" });
   }
 
   if (error) {
@@ -17,13 +17,12 @@ const validateContact = (req, res, next) => {
         message: `Invalid data type for ${missingField}: ${errorMessage}`,
       });
     }
-
     return res
       .status(400)
       .json({ message: `missing required ${missingField} field` });
   }
-
+  
   next();
 };
 
-module.exports = validateContact;
+module.exports = validateFavorite;
