@@ -1,5 +1,6 @@
 const { User, schemas } = require("../../models/user");
-const bcrypt = require('bcrypt'); 
+const bcrypt = require("bcrypt");
+const gravatar = require("gravatar");
 
 const register = async (req, res, next) => {
   try {
@@ -19,8 +20,15 @@ const register = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const hashEmail = await bcrypt.hash(email, 16);
 
-    const newUser = await User.create({...req.body, password: hashPassword});
+    const avatarURL = gravatar.url(hashEmail, { d: "retro", s: "100" }, true);
+
+    const newUser = await User.create({
+      ...req.body,
+      password: hashPassword,
+      avatarURL,
+    });
 
     res.status(201).json({
       user: {
