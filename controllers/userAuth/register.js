@@ -1,6 +1,11 @@
 const { User, schemas } = require("../../models/user");
 const bcrypt = require("bcrypt");
 const gravatar = require("gravatar");
+const { v4: uuid } = require('uuid');
+
+
+const sendEmail = require("../../helpers/sendEmail");
+const { BASE_URL } = process.env;
 
 const register = async (req, res, next) => {
   try {
@@ -21,6 +26,7 @@ const register = async (req, res, next) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
     const hashEmail = await bcrypt.hash(email, 16);
+    const verificationToken = uuid(); 
 
     const avatarURL = gravatar.url(hashEmail, { d: "retro", s: "100" }, true);
 
@@ -28,7 +34,16 @@ const register = async (req, res, next) => {
       ...req.body,
       password: hashPassword,
       avatarURL,
+      verificationToken
     });
+
+    const verifyEmail = {
+      to: email,
+      subject: "Verify email",
+      html: `<a target="_blank" href="${BASE_URL}/users/verify/${verificationToken}">Click to verify email</a>`
+    }
+
+    await sendEmail(verifyEmail);
 
     res.status(201).json({
       user: {
